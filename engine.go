@@ -1,15 +1,15 @@
 package reggiexpress
 
 type Engine struct {
-	queue []*Node
-	graph *FlowNetwork
+	queue []Node
+	graph FlowGraph
 }
 
-func NewEngine() *Engine {
-	q := []*Node{}
-	return &Engine{
+func NewEngine() Engine {
+	q := []Node{}
+	return Engine{
 		q,
-		NewFlowNetwork(),
+		NewFlowGraph(),
 	}
 }
 

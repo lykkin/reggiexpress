@@ -4,14 +4,14 @@ type Group struct {
 	// name string;
 	captured bool
 	// value string;
-	graph *FlowNetwork
-	queue []*Node
+	graph FlowGraph
+	queue []Node
 }
 
-func NewGroup(queue []*Node, captured bool) *Group {
-	return &Group{
+func NewGroup(queue []Node, captured bool) Group {
+	return Group{
 		captured,
-		NewFlowNetwork(),
+		NewFlowGraph(),
 		queue,
 	}
 }

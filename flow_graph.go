@@ -1,27 +1,27 @@
 package reggiexpress
 
-type FlowNetwork struct {
+type FlowGraph struct {
 	Source *Node
 	End    *Node
 }
 
-func NewFlowNetwork() *FlowNetwork {
+func NewFlowGraph() FlowGraph {
 	r := NewNode()
-	return &FlowNetwork{
-		r,
-		r,
+	return FlowGraph{
+		&r,
+		&r,
 	}
 }
 
-type NetworkNode struct {
-	node  *Node
+type GraphNode struct {
+	node  Node
 	input string
 }
 
-func (fg *FlowNetwork) Process(input string) (error, []string) {
-	stack := []NetworkNode{
-		NetworkNode{
-			fg.Source,
+func (fg *FlowGraph) Process(input string) (error, []string) {
+	stack := []GraphNode{
+		GraphNode{
+			*fg.Source,
 			input,
 		},
 	}
@@ -29,7 +29,7 @@ func (fg *FlowNetwork) Process(input string) (error, []string) {
 	for len(stack) > 0 {
 		lastIdx := len(stack) - 1
 		n := stack[lastIdx]
-		if n.node == fg.End {
+		if &n.node == fg.End {
 			res = append(res, input[len(n.input):])
 		} else {
 			stack = append(stack[:lastIdx], n.node.Traverse(input)...)
@@ -38,6 +38,6 @@ func (fg *FlowNetwork) Process(input string) (error, []string) {
 	return nil, res
 }
 
-func (fg *FlowNetwork) Build(pattern string) {
+func (fg *FlowGraph) Build(pattern string) {
 	//for i, c := range pattern
 }
