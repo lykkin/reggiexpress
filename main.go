@@ -3,7 +3,6 @@ import (
   "fmt"
 )
 func main() {
-  fg := NewFlowGraph();
-  fg.Build("asdf");
-  fmt.Print(fg.Process("asdf"))
+  fg := newFlowGraph();
+  fmt.Print(fg.process("asdf"))
 }

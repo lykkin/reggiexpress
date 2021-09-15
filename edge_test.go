@@ -1,7 +1,6 @@
-package reggiexpress_test
+package reggiexpress
 
 import (
-	"reggiexpress"
 	"testing"
 )
 
@@ -20,15 +19,15 @@ func TestEdgeTest(t *testing.T) {
 		"asdd",
 	}
 	pattern := "asdf"
-	e := reggiexpress.NewEdge(false, pattern, reggiexpress.Node{})
+	e := newEdge(false, pattern, nil)
 	for _, m := range matches {
-		doesMatch, rest, _ := e.Test(m)
+		doesMatch, rest, _ := e.test(m)
 		if !doesMatch || rest != m[len(pattern):] {
 			t.Fail()
 		}
 	}
 	for _, m := range nonMatches {
-		doesMatch, rest, _ := e.Test(m)
+		doesMatch, rest, _ := e.test(m)
 		if doesMatch || len(rest) > 0 && rest != m[len(pattern):] {
 			t.Fail()
 		}
@@ -37,12 +36,12 @@ func TestEdgeTest(t *testing.T) {
 
 func TestEdgeWildcardTest(t *testing.T) {
 	pattern := "."
-	e := reggiexpress.NewEdge(true, pattern, reggiexpress.Node{})
-	doesMatch, rest, _ := e.Test("asdf")
+	e := newEdge(true, pattern, nil)
+	doesMatch, rest, _ := e.test("asdf")
 	if !doesMatch || rest != "sdf" {
 		t.Fail()
 	}
-	doesMatch, rest, _ = e.Test("")
+	doesMatch, rest, _ = e.test("")
 	if doesMatch || rest != "" {
 		t.Fail()
 	}
@@ -50,9 +49,9 @@ func TestEdgeWildcardTest(t *testing.T) {
 
 func TestEdgeEmptyPattern(t *testing.T) {
 	pattern := ""
-	e := reggiexpress.NewEdge(false, pattern, reggiexpress.Node{})
-	doesMatch, rest, _ := e.Test("")
-	doesMatch, rest, _ = e.Test("")
+	e := newEdge(false, pattern, nil)
+	doesMatch, rest, _ := e.test("")
+	doesMatch, rest, _ = e.test("")
 	if !doesMatch || rest != "" {
 		t.Fail()
 	}

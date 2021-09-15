@@ -1,13 +1,12 @@
-package reggiexpress_test
+package reggiexpress
 
 import (
-	"reggiexpress"
 	"testing"
 )
 
 func TestAddEdge(t *testing.T) {
-	n := reggiexpress.NewNode()
-	term := reggiexpress.NewNode()
-	e := reggiexpress.NewEdge(false, "asdf", term)
-	n.AddEdge(e, false)
+	n := newNode()
+	term := newNode()
+	e := newEdge(false, "asdf", &term)
+	n.addEdge(e, false)
 }

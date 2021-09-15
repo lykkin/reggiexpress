@@ -5,15 +5,15 @@ import (
   "strings"
 )
 
-type Edge struct {
+type edge struct {
 	wildcard bool
 	pattern  string
-	dest     Node
+	dest     *node
 }
 
-func (e *Edge) Test(s string) (bool, string, Node) {
+func (e *edge) test(s string) (bool, string, *node) {
 	if len(s) < len(e.pattern) {
-		return false, "", Node{}
+		return false, "", nil
 	}
 	if e.wildcard {
 		return true, s[1:], e.dest
@@ -21,16 +21,16 @@ func (e *Edge) Test(s string) (bool, string, Node) {
   return s[:len(e.pattern)] == e.pattern, s[len(e.pattern):], e.dest
 }
 
-func NewEdge(wildcard bool, pattern string, dest Node) Edge {
-	return Edge{
+func newEdge(wildcard bool, pattern string, dest *node) edge {
+	return edge{
 		wildcard,
 		pattern,
 		dest,
 	}
 }
 
-func (e *Edge) Print(indent int) {
+func (e *edge) print(indent int) {
   buffer := "  "
   fmt.Println(strings.Repeat(buffer, indent) + e.pattern)
-  e.dest.Print(indent + 1)
+  e.dest.print(indent + 1)
 }

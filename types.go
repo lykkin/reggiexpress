@@ -1,3 +1,3 @@
 package reggiexpress
 
-var ControlSymbols map[byte]func()Node
+var ControlSymbols map[byte]func()node

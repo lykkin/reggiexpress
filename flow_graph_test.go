@@ -1,28 +1,38 @@
-package reggiexpress_test
+package reggiexpress
 
 import (
-	"reggiexpress"
 	"testing"
 )
 
-//func TestFlowGraphBuild(t *testing.T) {
-//	pattern := "asdf"
-//	fg := reggiexpress.NewFlowGraph()
-//  fg.Build(pattern)
-//  fg.Print()
-//}
-//
-//func TestFlowGraphBuildEmpty(t *testing.T) {
-//	pattern := ""
-//	fg := reggiexpress.NewFlowGraph()
-//  fg.Build(pattern)
-//}
+func TestFlowGraphBuild(t *testing.T) {
+	pattern := "asdf"
+	fg := newFlowGraph()
+  err, tokenStream := createTokenizer(pattern)
+  if err != nil {
+    t.Fail()
+  }
+  fg.build(tokenStream)
+}
+
+func TestFlowGraphBuildEmpty(t *testing.T) {
+	pattern := ""
+	fg := newFlowGraph()
+  err, tokenStream := createTokenizer(pattern)
+  if err != nil {
+    t.Fail()
+  }
+  fg.build(tokenStream)
+}
 
 func TestFlowGraphProcess(t *testing.T) {
 	pattern := "asdf"
-	fg := reggiexpress.NewFlowGraph()
-  fg.Build(pattern)
-  err, res := fg.Process("asdf")
+	fg := newFlowGraph()
+  err, tokenStream := createTokenizer(pattern)
+  if err != nil {
+    t.Fail()
+  }
+  fg.build(tokenStream)
+  err, res := fg.process("asdf")
   if err != nil {
     t.Errorf("Got an error while processing: %s", err)
   }

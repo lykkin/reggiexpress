@@ -1,89 +1,73 @@
 package reggiexpress
 
-import "fmt"
+import (
+  "errors"
+)
 
-type FlowGraph struct {
-	Source Node
-	End    Node
+type flowGraph struct {
+	Source node
+	End    node
 }
 
-func NewFlowGraph() FlowGraph {
-  s := NewNode()
-  e := NewNode()
-	return FlowGraph{
+func newFlowGraph() flowGraph {
+  s := newNode()
+  e := newNode()
+	return flowGraph{
     s,
     e,
 	}
 }
 
-type GraphNode struct {
-	node  Node
+type graphNode struct {
+	node  *node
 	input string
 }
 
-func (fg *FlowGraph) Process(input string) (error, []string) {
-	stack := []GraphNode{
-		GraphNode{
-			fg.Source,
+func (fg *flowGraph) process(input string) (error, []string) {
+	stack := []graphNode{
+		graphNode{
+			&fg.Source,
 			input,
 		},
 	}
 	res := []string{}
-  i := 0
 	for len(stack) > 0 {
 		lastIdx := len(stack) - 1
 		n := stack[lastIdx]
     stack = stack[:lastIdx]
-    i += 1
-		//if &n.node == &fg.End {
-    fmt.Print(n.node.id, fg.End.id)
-    if n.node.Equal(fg.End) {
-      fmt.Print(1)
+		if n.node == &fg.End {
 			res = append(res, input[len(n.input):])
 		} else {
-			stack = append(stack, n.node.Traverse(input)...)
+			stack = append(stack, n.node.traverse(input)...)
 		}
-    fmt.Println("length", len(stack))
 	}
-  fmt.Println("i", i)
-	return nil, res
+  if len(res) == 0 {
+    return errors.New("no matches found"), res
+  }
+  return nil, res
 }
 
-func (fg *FlowGraph) Print() {
-  fmt.Println("Begin")
-  fg.Source.Print(0)
+func (fg *flowGraph) print() {
+  fg.Source.print(0)
 }
 
-func (fg *FlowGraph) Build(pattern string) {
+func (fg *flowGraph) build(tokens tokenStream) {
+  // TODO: what happens when built twice?
   currentNode := &fg.Source;
-  // TODO: optimize this into a set of offsets
-  subpattern := "";
-  for i := range pattern {
-    c := pattern[i]
-    if _, isControl := ControlSymbols[c]; isControl {
-      if len(subpattern) > 0 {
-        n := NewNode()
-        currentNode.AddEdge(
-          NewEdge(false, subpattern, n),
-          c == '?',
-        );
-        currentNode = &n
-        subpattern = ""
-      }
+  for token := range tokens {
+    if token.isControl {
+      // This is always false for now
     } else {
-      subpattern += string(c);
+      n := newNode()
+      currentNode.addEdge(
+        newEdge(false, token.pattern, &n),
+        token.isOptional,
+      );
+      currentNode = &n
     }
   }
-  if len(subpattern) > 0 {
-    n := NewNode()
-    currentNode.AddEdge(
-      NewEdge(false, subpattern, n),
-      false,
-    );
-    currentNode = &n
-  }
-  currentNode.AddEdge(
-    NewEdge(false, "", fg.End),
+  currentNode.addEdge(
+    newEdge(false, "", &fg.End),
     false,
   )
 }

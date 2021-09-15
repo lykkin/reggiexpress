@@ -1,17 +1,17 @@
 package reggiexpress
 
-type Group struct {
+type group struct {
 	// name string;
 	captured bool
 	// value string;
-	graph FlowGraph
-	queue []Node
+	graph flowGraph
+	queue []node
 }
 
-func NewGroup(queue []Node, captured bool) Group {
-	return Group{
+func newGroup(queue []node, captured bool) group {
+	return group{
 		captured,
-		NewFlowGraph(),
+		newFlowGraph(),
 		queue,
 	}
 }

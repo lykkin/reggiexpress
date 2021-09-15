@@ -4,36 +4,31 @@ import "fmt"
 
 var id int
 
-type Node struct {
-	edges []Edge
+type node struct {
+	edges []edge
   id int
   visitedInPrint bool
 }
 
-func NewNode() Node {
+func newNode() node {
   id += 1
-	return Node{
-		[]Edge{},
+	return node{
+		[]edge{},
     id,
     false,
 	}
 }
 
-func (n *Node) AddEdge(e Edge, optional bool) {
+func (n *node) addEdge(e edge, optional bool) {
 	n.edges = append(n.edges, e)
 }
 
-func (n *Node) Equal(other Node) bool {
-  return n.id == other.id
-}
-
-func (n *Node) Traverse(input string) []GraphNode {
-	res := []GraphNode{}
+func (n *node) traverse(input string) []graphNode {
+	res := []graphNode{}
 	for _, e := range n.edges {
-		matched, rem, next := e.Test(input)
+		matched, rem, next := e.test(input)
 		if matched {
-      fmt.Println(rem, &next)
-			res = append(res, GraphNode{
+			res = append(res, graphNode{
 				next,
 				rem,
 			})
@@ -42,14 +37,14 @@ func (n *Node) Traverse(input string) []GraphNode {
 	return res
 }
 
-func (n *Node) Print(indent int) {
+func (n *node) print(indent int) {
   if (n.visitedInPrint) {
     return
   }
   n.visitedInPrint = true
-  fmt.Println(id)
+  fmt.Println("-> ", n.id)
   for _, e := range n.edges {
-    e.Print(indent)
+    e.print(indent)
   }
   n.visitedInPrint = false
 }
