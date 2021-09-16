@@ -10,15 +10,14 @@ type flowGraph struct {
 }
 
 func newFlowGraph() flowGraph {
-  s := newNode()
-  e := newNode()
-	return flowGraph{
-    s,
-    e,
+  return flowGraph{
+    newNode(),
+    newNode(),
 	}
 }
 
 type graphNode struct {
+  // TODO: axe all the pointers
 	node  *node
 	input string
 }
@@ -51,23 +50,42 @@ func (fg *flowGraph) print() {
   fg.Source.print(0)
 }
 
-func (fg *flowGraph) build(tokens tokenStream) {
+func (fg *flowGraph) build(tokens tokenStream) error {
   // TODO: what happens when built twice?
   currentNode := &fg.Source;
-  for token := range tokens {
-    if token.isControl {
-      // This is always false for now
-    } else {
+  tokenIterator: for it := range tokens {
+    switch token := it.(type) {
+    case patternToken:
       n := newNode()
       currentNode.addEdge(
         newEdge(false, token.pattern, &n),
         token.isOptional,
       );
       currentNode = &n
+
+    case controlToken:
+      // TODO: break this out
+      switch it {
+      case startGroup:
+        subFg := newFlowGraph()
+        currentNode.addEdge(
+          newEdge(false, "", &subFg.Source),
+          token.isOptional,
+        );
+        subFg.build(tokens)
+        currentNode = &subFg.End
+
+      case endGroup:
+        break tokenIterator
+      }
+
+    default:
+      return errors.New("unknown token type encountered")
     }
   }
   currentNode.addEdge(
     newEdge(false, "", &fg.End),
     false,
   )
+  return nil
 }
