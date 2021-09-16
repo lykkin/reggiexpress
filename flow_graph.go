@@ -18,8 +18,8 @@ func newFlowGraph() flowGraph {
 
 type graphNode struct {
 	// TODO: axe all the pointers
-	node  *node
-	input string
+	node     *node
+	fragment string
 }
 
 func (fg *flowGraph) process(input string) (error, []string) {
@@ -34,10 +34,10 @@ func (fg *flowGraph) process(input string) (error, []string) {
 		lastIdx := len(stack) - 1
 		n := stack[lastIdx]
 		stack = stack[:lastIdx]
-		if n.node == &fg.End {
-			res = append(res, input[len(n.input):])
+		if n.node.id == fg.End.id {
+			res = append(res, input[len(n.fragment):])
 		} else {
-			stack = append(stack, n.node.traverse(input)...)
+			stack = append(stack, n.node.traverse(n.fragment)...)
 		}
 	}
 	if len(res) == 0 {
