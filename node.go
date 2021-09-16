@@ -5,17 +5,17 @@ import "fmt"
 var id int
 
 type node struct {
-	edges []edge
-  id int
-  visitedInPrint bool
+	edges          []edge
+	id             int
+	visitedInPrint bool
 }
 
 func newNode() node {
-  id += 1
+	id += 1
 	return node{
 		[]edge{},
-    id,
-    false,
+		id,
+		false,
 	}
 }
 
@@ -38,13 +38,13 @@ func (n *node) traverse(input string) []graphNode {
 }
 
 func (n *node) print(indent int) {
-  if (n.visitedInPrint) {
-    return
-  }
-  n.visitedInPrint = true
-  fmt.Println("-> ", n.id)
-  for _, e := range n.edges {
-    e.print(indent)
-  }
-  n.visitedInPrint = false
+	if n.visitedInPrint {
+		return
+	}
+	n.visitedInPrint = true
+	fmt.Println("-> ", n.id)
+	for _, e := range n.edges {
+		e.print(indent)
+	}
+	n.visitedInPrint = false
 }

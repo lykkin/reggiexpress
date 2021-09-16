@@ -1,8 +1,10 @@
 package reggiexpress
+
 import (
-  "fmt"
+	"fmt"
 )
+
 func main() {
-  fg := newFlowGraph();
-  fmt.Print(fg.process("asdf"))
+	fg := newFlowGraph()
+	fmt.Print(fg.process("asdf"))
 }

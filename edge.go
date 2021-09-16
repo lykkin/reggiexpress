@@ -1,8 +1,8 @@
 package reggiexpress
 
 import (
-  "fmt"
-  "strings"
+	"fmt"
+	"strings"
 )
 
 type edge struct {
@@ -18,7 +18,7 @@ func (e *edge) test(s string) (bool, string, *node) {
 	if e.wildcard {
 		return true, s[1:], e.dest
 	}
-  return s[:len(e.pattern)] == e.pattern, s[len(e.pattern):], e.dest
+	return s[:len(e.pattern)] == e.pattern, s[len(e.pattern):], e.dest
 }
 
 func newEdge(wildcard bool, pattern string, dest *node) edge {
@@ -30,7 +30,7 @@ func newEdge(wildcard bool, pattern string, dest *node) edge {
 }
 
 func (e *edge) print(indent int) {
-  buffer := "  "
-  fmt.Println(strings.Repeat(buffer, indent) + e.pattern)
-  e.dest.print(indent + 1)
+	buffer := "  "
+	fmt.Println(strings.Repeat(buffer, indent) + e.pattern)
+	e.dest.print(indent + 1)
 }
